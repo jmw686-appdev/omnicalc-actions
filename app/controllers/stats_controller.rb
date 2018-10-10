@@ -7,36 +7,65 @@ class StatsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer"
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer"
+    @count = @numbers.count.to_s
 
-    @minimum = "Replace this string with your answer"
+    @minimum = @sorted_numbers[0].to_s
 
-    @maximum = "Replace this string with your answer"
+    @maximum = @sorted_numbers[@sorted_numbers.length-1].to_s
 
-    @range = "Replace this string with your answer"
+    @range = (@maximum.to_f - @minimum.to_f).to_s
 
     # Median
     # ======
+    median = -1
+    half = @numbers.length/2
+    if !@numbers.length.even?
+      median = @sorted_numbers[@numbers.length/2]
+    else
+      l = @sorted_numbers[half - 1].to_f
+      r = @sorted_numbers[half].to_f
+      # median = half
+      median = (l+r)/2.0
+    end
+    max = 0
+    @numbers.each do |i|
+      max+=i
+    end
+    @median = median.to_s
 
-    @median = "Replace this string with your answer"
-
-    @sum = "Replace this string with your answer"
-
-    @mean = "Replace this string with your answer"
+    @sum = max.to_s
+    max /= @numbers.length
+    @mean = max.to_s
 
     # Variance
     # ========
+    var = 0.to_f
+    freq = Hash.new(0)
+    max = 0
+    times = 0
+    @numbers.each do |n|
+      freq[n] += 1
+      if max < freq[n]
+        max = n
+        times = freq[n]
+      end
+      var += (n - @mean.to_f)**2
+    end
+    @variance = (var / @numbers.count).to_s
 
-    @variance = "Replace this string with your answer"
-
-    @standard_deviation = "Replace this string with your answer"
+    @standard_deviation = (Math.sqrt(var / @numbers.count)).to_s
 
     # Mode
     # ====
-
-    @mode = "Replace this string with your answer"
+    freq = freq.sort_by {|_key, value| -value}
+    if freq.length == 1 || (freq[0][1] != freq[1][1])
+      mo = freq[0][0].to_s
+    else
+      mo = "No Mode"
+    end
+    @mode = mo
 
     # ================================================================================
     # Your code goes above.

@@ -11,12 +11,13 @@ class LoanPaymentController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer"
+    r = @apr / 1200
+    exp = @years * 12
+    @monthly_payment = (r * @principal) / (1 - (1 + r)**-exp)
 
     # ================================================================================
     # Your code goes above.
     # ================================================================================
-
     render("loan_payment/loan_payment.html.erb")
   end
 end
